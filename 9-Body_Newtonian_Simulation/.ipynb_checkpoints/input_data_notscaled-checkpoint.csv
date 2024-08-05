@@ -1,4 +1,4 @@
-Body,Mass (kg),x_position (km),y_position (km),z_position (km),x_velocity (m/s),y_velocity (m/s),z_velocity (m/s), Diameter (m)
+Body,Mass (kg),x_position (km),y_position (km),z_position (km),x_velocity (km/s),y_velocity (km/s),z_velocity (km/s), Diameter (m)
 Sun,1.989E30,0,0,0,0,0,0,1391400000
 Mercury,20.33E24,-3.976045796395392E+07,-5.566455148693509E+07,-9.011561092846394E+05,2.978564575861331E+01,-2.602391792194269E+01,-4.858920265115197E+00,4879000
 Venus,4.87E24,1.063282754331024E+08,-2.209689633569611E+07,-6.439098739071373E+06,6.952734569902644E+00,3.413167299718424E+01,6.711275548697238E-02,12104000
