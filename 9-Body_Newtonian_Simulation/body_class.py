@@ -3,11 +3,12 @@ import numpy as np
 
 #==============================================================================================================================================================================#
 
-# define constants (time step and duration)
+#define time step and duration
 duration_in_years = 50 #must equate number of years passed to main function
-duration_in_days = duration_in_years * 365.24 #conver user input to days
-time_step = 1   #in days
-time = np.arange(0, duration_in_days, time_step)
+
+duration_in_seconds = duration_in_years * 31536000 #convert user input to seconds
+time_step = 86400 #in seconds, equivalent to 1 day
+time = np.arange(0, duration_in_seconds, time_step)
 ntime = len(time)
 
 #==============================================================================================================================================================================#

@@ -2,14 +2,15 @@
 import numpy as np
 import scipy
 from scipy import constants
+# from numba import jit, prange
 
 #==============================================================================================================================================================================#
 
 #define time step and duration
 duration_in_years = 50 #must equate number of years passed to main function
-duration_in_days = duration_in_years * 365.24 #conver user input to days
-time_step = 1 #in days
-time = np.arange(0, duration_in_days, time_step)
+duration_in_seconds = duration_in_years * 31536000 #convert user input to seconds
+time_step = 86400 #in seconds, equivalent to 1 day
+time = np.arange(0, duration_in_seconds, time_step)
 ntime = len(time)
 
 #==============================================================================================================================================================================#
@@ -17,6 +18,7 @@ ntime = len(time)
 #FUNCTIONS
 
 #function to create between-body position vector array
+# @jit(nopython=True, parallel=True)
 def create_3d_between_body_position_vector_array(list_of_bodies):
     """
     Takes a list of Body-type objects (with initialised 3d position vector array attributes (of length ntime)) and returns a 'between_body_position_vector_array' of shape 
@@ -31,6 +33,7 @@ def create_3d_between_body_position_vector_array(list_of_bodies):
 
 
 #function to create between-body unit position vector array
+# @jit(nopython=True, parallel=True)
 def create_3d_between_body_unit_vector_array(between_body_position_vector_array):
     """
     Takes a (9,9,3,ntime)-shape array of between body position vectors and returns a (9,9,3,ntime)-shape array of the unit vectors for each of these. 
@@ -47,9 +50,10 @@ def create_3d_between_body_unit_vector_array(between_body_position_vector_array)
 
 
 #function to create between-body force vector array
+# @jit(nopython=True, parallel=True)
 def create_3d_between_body_force_vector_array(list_of_bodies, between_body_position_vector_array, between_body_unit_vector_array):
     """ 
-    Takes a list of Body-type objects, a (9,9,3,ntime)-shape between_body_position_vector_array, and (9,9,3,ntime)-shape bbetween_body_unit_vector_array and returns a 
+    Takes a list of Body-type objects, a (9,9,3,ntime)-shape between_body_position_vector_array, and (9,9,3,ntime)-shape between_body_unit_vector_array and returns a 
     (9,9,3,ntime)-shape 
     array of between body force vectors.
     e.g. between_body_force_vector_array[2,5,:,:] = all force vectors from venus to jupiter, at all time steps in 3 dimensions.
@@ -65,6 +69,7 @@ def create_3d_between_body_force_vector_array(list_of_bodies, between_body_posit
 
 
 #function to create total-force-acting-on each body vector array
+# @jit(nopython=True, parallel=True)
 def create_3d_total_Force_acting_on_array(between_body_force_vector_array):
     """ 
     Takes a between_body_force_vector_array of shape (9,9,3,ntime) and returns a (9,3,ntime)-shape array of the total forces acting on each body.
@@ -72,12 +77,13 @@ def create_3d_total_Force_acting_on_array(between_body_force_vector_array):
     """
     total_Force_acting_on_array = np.empty((9,3,ntime))
     for nth_time in np.array((range(ntime))):      
-        for force_on_body_index in np.array((range(9))):
-            total_Force_acting_on_array[force_on_body_index, :, nth_time]= sum(between_body_force_vector_array[:, force_on_body_index,:,nth_time])
+        for body_index in np.array((range(9))):
+            total_Force_acting_on_array[body_index, :, nth_time]= sum(between_body_force_vector_array[body_index,:,:,nth_time])
     return total_Force_acting_on_array
 
 
 #function to create acceleration for each body vector array
+# @jit(nopython=True, parallel=True)
 def  create_3d_accelerations_vector_array(list_of_bodies, total_Force_acting_on_array):
     """
     Takes a list of Body-type objects and a (9,3,ntime)-shape array of the total forces acting on each body, and returns a (9,3,ntime)-shape array of the accelarations for 
